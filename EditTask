@@ -1,0 +1,75 @@
+import { Instance } from "mobx-state-tree"
+import TodoStore from "../todoStore"
+import { observer } from "mobx-react-lite"
+import { AiOutlineClose } from 'react-icons/Ai';
+interface editTask{
+store:Instance<typeof TodoStore>
+}
+const Edit : React.FC <editTask> = observer(({store}) => {
+    
+
+    const edittask=store.todos.filter((todo)=> todo.checkBox == true)
+    var nid:number=0;
+
+    
+    edittask.map((todo)=>(
+        nid=todo.id       
+
+    ))
+    var mmid:number=0;
+    for (var i=0;i<store.todos.length;i++){
+        if (store.todos[i].id==nid){
+            break
+        }else{
+            mmid=mmid+1;
+        }
+    };  
+    if(store.todos[mmid]){
+        var tv=store.todos[mmid].title
+        var dv=store.todos[mmid].discription
+
+    }else{
+        var tv=""
+        var dv=""
+    }
+    
+    const handleChangeT=(event:React.ChangeEvent<HTMLInputElement>)=>{
+        tv=event.target.value
+    }
+    const handleChangeD =(event:React.ChangeEvent<HTMLInputElement>) =>{
+        dv=event.target.value;
+    }
+    const addV = () => {    
+         
+            
+            
+        store.todos[mmid].title=tv;
+        store.todos[mmid].discription=dv;
+        store.editbutton=!store.editbutton
+    }
+    const closeb=()=>{
+        store.editbutton=!store.editbutton
+    }
+    
+    return(
+        <div className={store.editbutton ? "fixed  inset-0 flex-row items-center justify-center bg-black bg-opacity-50" :"hidden"}>
+            <form className=' bg-slate-500  max-w-lg mt-80 ml-96'>
+            <button type='reset' className=' float-right text-lg'  onClick={closeb}><AiOutlineClose/></button>
+            <div className='text-center'>
+            <label>Title :</label>
+            <input id="title" name='title' type="text" placeholder={tv}   onChange={handleChangeT}/>
+            <br/>
+            <br/>
+            <label>discription :</label>
+            <input id="discription" name='discription' type="text" placeholder={dv} onChange={handleChangeD}/>
+            <br/><br/>
+            <button type="reset" className=" ml-20 bg-blue-400 rounded-lg font-bold" onClick={addV}>DONE</button>
+            </div>
+            </form>
+
+        </div>
+    )
+
+    
+})
+export default Edit;
